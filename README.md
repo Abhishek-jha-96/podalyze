@@ -85,3 +85,42 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ---
 
 Built with ❤️ using React Router.
+
+--- 
+## Repo structure:
+src/
+  app/                <-- Application-specific code (routes, layouts, views)
+    routes/
+      dashboard/
+        DashboardPage.tsx
+        DashboardLayout.tsx
+        dashboardLoader.ts
+        dashboardActions.ts
+      settings/
+        SettingsPage.tsx
+    components/        <-- UI components tied to app (may use shared ones too)
+    layouts/           <-- App-level layouts
+    utils/             <-- Only app-specific utils
+    hooks/             <-- Only app-specific hooks
+    constants/         <-- App-specific constants
+    stores/            <-- App-specific state management (e.g., Zustand, Jotai)
+    services/          <-- App-specific API services
+    index.tsx          <-- App entrypoint
+  libs/                <-- Fully reusable libraries (can be used across apps)
+    hooks/
+      useDebounce.ts
+      useLocalStorage.ts
+    utils/
+      formatDate.ts
+      generateUUID.ts
+    components/        <-- Reusable design system components (Button, Input, etc.)
+      Button.tsx
+      Input.tsx
+    api/               <-- API clients, SDKs
+      axiosInstance.ts
+  assets/              <-- Images, fonts, static assets
+  config/              <-- App configuration (env vars, routes config, etc.)
+  styles/              <-- Global styles (CSS/SCSS/Tailwind config)
+  types/               <-- Global TypeScript types/interfaces
+  lib/                 <-- (optional) helper code that is a bit too heavy for libs/, like 3rd-party integrations
+  tests/               <-- (optional) unit/integration tests if you separate them
