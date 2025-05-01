@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../molecule/Navbar";
+import HeroText from "../molecule/HeroText";
 
 export default function Hero() {
   return (
@@ -7,8 +8,8 @@ export default function Hero() {
       <div className="container">
         <Navbar />
       </div>
-      <div>
-        Main heading
+      <div className="py-16">
+      <HeroText />
       </div>
       <div>
         video slider

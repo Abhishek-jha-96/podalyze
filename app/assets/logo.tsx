@@ -3,8 +3,8 @@ import * as React from "react";
 const LogoIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="74"
-    height="74"
+    width="70"
+    height="70"
     fill="none"
     viewBox="0 0 74 74"
   >
