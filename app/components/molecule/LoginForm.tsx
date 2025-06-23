@@ -4,16 +4,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { Button } from "../ui/button";
 import { InputField } from "../cell/InputField";
 import { FormFooter } from "../cell/FormFooter";
+import { useState } from "react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>{isLogin ? `Login to your account` : `Register`}</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
@@ -46,7 +49,7 @@ export function LoginForm({
                 </Button>
               </div>
             </div>
-            <FormFooter />
+            <FormFooter isLogin={isLogin} setIsLogin={setIsLogin}/>
           </form>
         </CardContent>
       </Card>

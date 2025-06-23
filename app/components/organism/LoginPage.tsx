@@ -1,5 +1,4 @@
-import React from 'react'
-import { LoginForm } from '../molecule/LoginForm'
+import { LoginForm } from "../molecule/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -8,5 +7,5 @@ export default function LoginPage() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }
