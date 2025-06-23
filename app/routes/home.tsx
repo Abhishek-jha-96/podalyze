@@ -3,8 +3,8 @@ import Hero from "~/components/organism/Hero";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Podalyze" },
+    { name: "description", content: "Analyze your podcast Viewership!" },
   ];
 }
 

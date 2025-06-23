@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../molecule/Navbar";
 import HeroText from "../molecule/HeroText";
 import HeroSwirl from "~/assets/heroSwirl";
@@ -9,7 +8,7 @@ import { Button } from "../ui/button";
 
 export default function Hero() {
   return (
-    <main className="bg-skin-base py-6 flex flex-col justify-center items-center">
+    <main className="bg-skin-base h-screen py-6 flex flex-col justify-center items-center">
       <div className="container">
         <Navbar />
       </div>
@@ -19,7 +18,7 @@ export default function Hero() {
         <HeroText />
         <p>We cover all kinds of categories and
         a weekly special guest.</p>
-        <Button>SUBSCRIBE</Button>
+        <Button className="px-8 py-5 shadow-(--shadow-no-blur)">Analyze</Button>
         </div>
         <div className="w-2xs">
           <TwinkelOne />
@@ -29,7 +28,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <div>video slider</div>
     </main>
   );
 }
