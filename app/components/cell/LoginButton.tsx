@@ -8,7 +8,7 @@ interface LoginButtonProps {
 
 export default function LoginButton({text, path}: LoginButtonProps) {
   return (
-    <Button className="bg-transparent text-black border-2 border-black hover:bg-transparent font-semibold">
+    <Button className="bg-transparent text-black border-2 border-black hover:bg-transparent hover:cursor-pointer font-semibold">
       <NavLink to={path} end>
         {text}
       </NavLink>

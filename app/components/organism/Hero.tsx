@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 export default function Hero() {
   return (
-    <main className="bg-skin-base h-screen py-6 flex flex-col justify-center items-center">
+    <main className="h-screen py-6 flex flex-col justify-center items-center">
       <div className="container">
         <Navbar />
       </div>
@@ -18,7 +18,7 @@ export default function Hero() {
         <HeroText />
         <p>We cover all kinds of categories and
         a weekly special guest.</p>
-        <Button className="px-8 py-5 shadow-(--shadow-no-blur)">Analyze</Button>
+        <Button className="px-8 py-5 hover:cursor-pointer shadow-(--shadow-no-blur)">Analyze</Button>
         </div>
         <div className="w-2xs">
           <TwinkelOne />

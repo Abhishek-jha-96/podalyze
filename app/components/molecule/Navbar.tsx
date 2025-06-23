@@ -14,7 +14,7 @@ export default function Navbar() {
       </div>
       <div className="flex justify-between w-48">
         <LoginButton text="Login" path="login/"></LoginButton>
-        <Button className="shadow-(--shadow-no-blur)">SUBSCRIBE</Button>
+        <Button className="hover:cursor-pointer shadow-(--shadow-no-blur)">SUBSCRIBE</Button>
       </div>
     </div>
   );
