@@ -9,7 +9,7 @@ export default function Tabs() {
       <NavLink to="/analytics" end>
         Analytics
       </NavLink>
-      <NavLink to="/upload_url">Upload URL</NavLink>
+      <NavLink to="/upload-url">Upload URL</NavLink>
     </nav>
   );
 }
