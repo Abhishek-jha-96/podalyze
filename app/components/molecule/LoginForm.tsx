@@ -1,5 +1,5 @@
-// components/forms/LoginForm.tsx
 import { cn } from "~/lib/utils";
+import { useForm } from "react-hook-form";
 import {
   Card,
   CardContent,
@@ -11,12 +11,45 @@ import { Button } from "../ui/button";
 import { InputField } from "../cell/InputField";
 import { FormFooter } from "../cell/FormFooter";
 import { useState } from "react";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "~/store/features/auth/authApi";
+import { useAppDispatch } from "~/store/hooks";
+import type {
+  LoginDataProps,
+  LoginFormProps,
+  RegisterDataProps,
+} from "~/constants/interfaces";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LoginForm({ className, ...props }: LoginFormProps) {
   const [isLogin, setIsLogin] = useState(true);
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
+  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
+  const dispatch = useAppDispatch();
+  const {
+    register: registerForm,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginDataProps & RegisterDataProps>();
+
+  const onSubmit = async (data: LoginDataProps | RegisterDataProps) => {
+    try {
+      if (isLogin) {
+        const { email, password } = data as LoginDataProps;
+        await login({ email, password }).unwrap();
+        // Handle successful login, e.g., redirect to another page
+      } else {
+        const { email, password } = data as RegisterDataProps;
+        await register({ email, password }).unwrap();
+        // Handle successful registration, e.g., redirect to login
+      }
+    } catch (err) {
+      console.error("Failed to authenticate:", err);
+      // Handle error, e.g., show error message to the user
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -26,73 +59,69 @@ export function LoginForm({
             {isLogin ? `Login to your account` : `Register`}
           </CardTitle>
           <CardDescription>
-            {isLogin ? "Enter your email below to login to your account" : "Fill in the form below to create a new account"}
+            {isLogin
+              ? "Enter your email below to login to your account"
+              : "Fill in the form below to create a new account"}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {isLogin ? (
-            <form>
-              <div className="flex flex-col gap-6">
-                <InputField
-                  id="email"
-                  label="Email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-                <div className="grid gap-3">
-                  <div className="flex items-center">
-                    <label htmlFor="password">Password</label>
-                    <a
-                      href="#"
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </a>
-                  </div>
-                  <InputField id="password" label="" type="password" required />
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full">
-                    Login
-                  </Button>
-                </div>
-              </div>
-              <FormFooter isLogin={isLogin} setIsLogin={setIsLogin} />
-            </form>
-          ) : (
-            <form>
-              <div className="flex flex-col gap-6">
-                <InputField
-                  id="email"
-                  label="Email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-                <InputField 
-                id="password" 
-                label="Password" 
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-6">
+              <InputField
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                {...registerForm("email", { required: "Email is required" })}
+              />
+              <InputField
+                id="password"
+                label="Password"
                 type="password"
-                placeholder="Enter your password" 
-                required 
-                />
+                placeholder={isLogin ? "" : "Enter your password"}
+                required
+                {...registerForm("password", {
+                  required: "Password is required",
+                })}
+              />
+              {!isLogin && (
                 <InputField
                   id="confirmPassword"
                   label="Confirm Password"
                   type="password"
                   placeholder="Re-enter your password"
                   required
+                  {...registerForm("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) =>
+                      value ===
+                        (
+                          document.getElementById(
+                            "password"
+                          ) as HTMLInputElement
+                        )?.value || "Passwords do not match",
+                  })}
                 />
-                <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full">
-                    Login
-                  </Button>
-                </div>
+              )}
+              <div className="flex flex-col gap-3">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isLoginLoading || isRegisterLoading}
+                >
+                  {isLogin
+                    ? isLoginLoading
+                      ? "Logging in..."
+                      : "Login"
+                    : isRegisterLoading
+                    ? "Registering..."
+                    : "Register"}
+                </Button>
               </div>
-              <FormFooter isLogin={isLogin} setIsLogin={setIsLogin} />
-            </form>
-          )}
+            </div>
+            <FormFooter isLogin={isLogin} setIsLogin={setIsLogin} />
+          </form>
         </CardContent>
       </Card>
     </div>
