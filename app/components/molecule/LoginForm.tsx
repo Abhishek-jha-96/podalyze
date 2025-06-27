@@ -30,15 +30,18 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   const {
     register: registerForm,
     handleSubmit,
+    watch,
     formState: { errors },
     reset,
   } = useForm<LoginDataProps & RegisterDataProps>();
+  const passwordValue = watch("password");
 
+  
   const onSubmit = async (data: LoginDataProps | RegisterDataProps) => {
     try {
       if (isLogin) {
         const { email, password } = data as LoginDataProps;
-        await login({ email, password }).unwrap();
+        let res = await login({ email, password }).unwrap();
         // Handle successful login, e.g., redirect to another page
       } else {
         const { email, password } = data as RegisterDataProps;
@@ -95,12 +98,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                   {...registerForm("confirmPassword", {
                     required: "Please confirm your password",
                     validate: (value) =>
-                      value ===
-                        (
-                          document.getElementById(
-                            "password"
-                          ) as HTMLInputElement
-                        )?.value || "Passwords do not match",
+                      value === passwordValue || "Passwords do not match",
                   })}
                 />
               )}
