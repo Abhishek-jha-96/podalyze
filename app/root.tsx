@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import Navbar from "./components/molecule/Navbar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -43,6 +44,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           minHeight: "100vh",
         }}
       >
+        <div>
+          <Navbar />
+        </div>
         {children}
         <ScrollRestoration />
         <Scripts />

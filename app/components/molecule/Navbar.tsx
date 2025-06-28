@@ -6,7 +6,7 @@ import { NavLink } from "react-router";
 
 export default function Navbar() {
   return (
-    <div className="flex items-center justify-between px-6 font-mono font-medium">
+    <div className="flex items-center justify-between font-mono font-medium bg-white/10 backdrop-blur-md border border-white/20 p-2 px-12 shadow-md">
       <div>
         <LogoIcon />
       </div>
