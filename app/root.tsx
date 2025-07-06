@@ -44,9 +44,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           minHeight: "100vh",
         }}
       >
-        <div>
-          <Navbar />
-        </div>
         {children}
         <ScrollRestoration />
         <Scripts />

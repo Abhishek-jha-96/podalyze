@@ -5,10 +5,14 @@ import TwinkelTwo from "~/assets/twinkel2";
 import TwinkelThree from "~/assets/twinkel3";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router";
+import Navbar from "../molecule/Navbar";
 
 export default function Hero() {
   return (
     <main className="flex flex-col justify-center">
+      <div>
+        <Navbar />
+      </div>
       <div className="flex w-full justify-between items-center">
         <HeroSwirl />
         <div className="flex flex-col gap-16 items-center">
@@ -16,8 +20,8 @@ export default function Hero() {
           <p>We cover all kinds of categories and a weekly special guest.</p>
           <NavLink to="/analytics">
             <Button className="px-8 py-5 hover:cursor-pointer shadow-(--shadow-no-blur)">
-            Analyze
-          </Button>
+              Analyze
+            </Button>
           </NavLink>
         </div>
         <div className="w-2xs">
