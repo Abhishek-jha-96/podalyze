@@ -1,8 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface Project {
-    title: string | null;
-    url: string | null;
+    title: string;
+    url: string;
     genre: string | null;
     sentiment: string | null;
     avg_time: number | null;
