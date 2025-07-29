@@ -1,22 +1,38 @@
-FROM node:20-alpine AS development-dependencies-env
-COPY . /app
-WORKDIR /app
-RUN npm ci
+# Build stage
+FROM node:20-alpine AS builder
 
-FROM node:20-alpine AS production-dependencies-env
-COPY ./package.json package-lock.json /app/
-WORKDIR /app
-RUN npm ci --omit=dev
+# Install pnpm
+RUN npm install -g pnpm
 
-FROM node:20-alpine AS build-env
-COPY . /app/
-COPY --from=development-dependencies-env /app/node_modules /app/node_modules
+# Set working directory
 WORKDIR /app
-RUN npm run build
 
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN pnpm run build
+
+# Production stage
 FROM node:20-alpine
-COPY ./package.json package-lock.json /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
+
+# Install pnpm globally
+RUN npm install -g pnpm serve
+
+# Set working directory
 WORKDIR /app
-CMD ["npm", "run", "start"]
+
+# Copy built assets from builder stage
+COPY --from=builder /app/build ./build
+
+# Expose port
+EXPOSE 3000
+
+# Serve the built application
+CMD ["serve", "-s", "build", "-l", "3000"]
