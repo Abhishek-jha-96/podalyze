@@ -1,47 +1,33 @@
-# Stage 1: Build the application
+# Stage 1: Builder for production builds
 FROM node:20-alpine AS builder
 
-# Install pnpm
 RUN npm install -g pnpm
-
-# Set working directory
 WORKDIR /app
-
-# Copy lock and manifest files
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
 RUN pnpm install --frozen-lockfile
-
-# Copy source code
 COPY . .
-
-# Build the application (includes SSR server + client bundle)
 RUN pnpm run build
 
-# Stage 2: Production server
+
+# Stage 2: Runtime container for both dev and prod
 FROM node:20-alpine
 
-# Install pnpm and react-router-serve globally
 RUN npm install -g pnpm
-
-# Create working directory
 WORKDIR /app
 
-# Copy runtime deps only (optional for minimal image)
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
-# Copy the built server & client assets
+# Always copy everything to support both modes
+COPY . .
 COPY --from=builder /app/build ./build
-
-# Copy static/public assets (if used)
 COPY --from=builder /app/public ./public
-
-# Expose the port used by the app
-EXPOSE 5173
 
 ENV PORT=5173
 
-# Start the SSR server
-CMD ["pnpm", "start"]
+# Entrypoint determines mode
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+EXPOSE 5173
+CMD ["sh", "/usr/local/bin/entrypoint.sh"]
