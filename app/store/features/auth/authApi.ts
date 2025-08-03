@@ -1,8 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQuery } from "~/store/baseQuery";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_API_URL }),
+  baseQuery: baseQuery,
   endpoints: (builder) => ({
     login: builder.mutation<
       { token: string; user: any },
@@ -19,7 +20,7 @@ export const authApi = createApi({
       { email: string; password: string }
     >({
       query: (userInfo) => ({
-        url: "/register",
+        url: "/auth/email/register",
         method: "POST",
         body: userInfo,
       }),

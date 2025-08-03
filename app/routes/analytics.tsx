@@ -17,11 +17,11 @@ export default function Analytics() {
     return () => clearTimeout(timeout);
   }, []);
 
-  // useEffect(() => {
-  //   if (ready && user === null) {
-  //     navigate("/login");
-  //   }
-  // }, [ready, user, navigate]);
+  useEffect(() => {
+    if (ready && user === null) {
+      navigate("/login");
+    }
+  }, [ready, user, navigate]);
 
   if (!ready) {
     return (

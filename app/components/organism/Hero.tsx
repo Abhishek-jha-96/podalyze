@@ -17,7 +17,7 @@ export default function Hero() {
         <HeroSwirl />
         <div className="flex flex-col gap-16 items-center">
           <HeroText />
-          <p>We cover all kinds of categories and a weekly special guest.</p>
+          <p>We cover all kinds of categories and a weekly special dsfdf guest.{import.meta.env.VITE_BASE_API_URL}</p>
           <NavLink to="/analytics">
             <Button className="px-8 py-5 hover:cursor-pointer shadow-(--shadow-no-blur)">
               Analyze

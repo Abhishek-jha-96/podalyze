@@ -1,5 +1,4 @@
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,11 +10,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { useCreateProjectMutation } from "~/store/features/projects/projectAPI";
+import type { IProjectFormProps } from "~/constants/interfaces";
+import { useForm } from "react-hook-form";
+import { InputField } from "../cell/InputField";
 
 export function AddModal() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<IProjectFormProps>();
+  const [createProject, {isLoading: isProjectCreating }] = useCreateProjectMutation();
+
+  const handleProjectCreate = async (data: IProjectFormProps) => {
+    try {
+      await createProject({
+        title: data.title,
+        url: data.url,
+      }).unwrap();
+
+      reset();
+    } catch (err) {
+      alert(`Failed to create project: ${err}`)
+    }
+  } 
+
   return (
     <Dialog>
-      <form>
+      <form onSubmit={handleSubmit(handleProjectCreate)}>
         <DialogTrigger asChild>
           <Button className="bg-primary-text text-lg py-7">
             <span>Add Podcast</span>
@@ -31,14 +55,21 @@ export function AddModal() {
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Podcast Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+              <Label htmlFor="title">Podcast Name</Label>
+              <InputField
+              id="title"
+              label="title"
+              {...register("title", { required: true})}
+              placeholder="podcast title"
+               />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="youtubeurl-1">Youtube URL</Label>
-              <Input
-                id="youtubeurl-1"
-                name="youtubeurl"
+              <InputField
+                label="URL"
+                id="url"
+                {...register("url", { required: true})}
+                placeholder="https://youtu.be/9oL3o6pme7w?si=Yj7qpUX7-cGik7Ti"
               />
             </div>
           </div>
@@ -46,7 +77,9 @@ export function AddModal() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isProjectCreating || isSubmitting}>
+              {isProjectCreating || isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </form>

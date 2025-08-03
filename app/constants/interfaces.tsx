@@ -17,3 +17,8 @@ export interface IAnalyticProps {
   sentiment: string;
   avg_time: number
 }
+
+export interface IProjectFormProps {
+  title: string;
+  url: string;
+}
