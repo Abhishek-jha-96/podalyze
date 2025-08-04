@@ -5,6 +5,9 @@ RUN npm install -g pnpm
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
+
+ARG VITE_BASE_API_URL
+RUN echo "VITE_BASE_API_URL=${VITE_BASE_API_URL}" > .env.production
 COPY . .
 RUN pnpm run build
 
