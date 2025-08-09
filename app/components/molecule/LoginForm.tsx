@@ -21,12 +21,15 @@ import type {
   LoginFormProps,
   RegisterDataProps,
 } from "~/constants/interfaces";
+import { setCredentials } from "~/store/features/auth/authSlice";
+import { useNavigate } from "react-router";
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
+  const [register, { isLoading: isRegisterLoading, isSuccess }] = useRegisterMutation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     register: registerForm,
     handleSubmit,
@@ -43,15 +46,19 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         const { email, password } = data as LoginDataProps;
         let res = await login({ email, password }).unwrap();
         localStorage.setItem("access", res.token);
+        dispatch(setCredentials({user: res.user, token: res.token}));
+        navigate('/');
 
       } else {
         const { firstName, lastName, email, password } = data as RegisterDataProps;
         await register({firstName, lastName, email, password }).unwrap();
-        // Handle successful registration, e.g., redirect to login
+        if (isSuccess){
+          alert("Successfully registered. Now login to your account!")
+        }
       }
     } catch (err) {
       console.error("Failed to authenticate:", err);
-      // Handle error, e.g., show error message to the user
+      alert(`Failed Request due to: ${err}`)
     }
   };
 

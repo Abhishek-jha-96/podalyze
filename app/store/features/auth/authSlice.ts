@@ -1,8 +1,14 @@
 // features/auth/authSlice.ts
 import { createSlice, type PayloadAction,  } from '@reduxjs/toolkit'
 
+interface UserDetails {
+  id: string;
+  firstName: string;
+  lastName: string;
+} 
+
 interface AuthState {
-  user: any | null
+  user: UserDetails | null
   token: string | null
   isAuthenticated: boolean
 }
