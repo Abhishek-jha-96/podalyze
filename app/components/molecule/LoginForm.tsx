@@ -42,10 +42,11 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
       if (isLogin) {
         const { email, password } = data as LoginDataProps;
         let res = await login({ email, password }).unwrap();
-        // Handle successful login, e.g., redirect to another page
+        localStorage.setItem("access", res.token);
+
       } else {
-        const { email, password } = data as RegisterDataProps;
-        await register({ email, password }).unwrap();
+        const { firstName, lastName, email, password } = data as RegisterDataProps;
+        await register({firstName, lastName, email, password }).unwrap();
         // Handle successful registration, e.g., redirect to login
       }
     } catch (err) {
@@ -78,6 +79,30 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                 required
                 {...registerForm("email", { required: "Email is required" })}
               />
+              {!isLogin && (
+                <InputField
+                  id="firstName"
+                  label="First Name"
+                  type="text"
+                  placeholder="Enter Your First name"
+                  required
+                  {...registerForm("firstName", {
+                    required: "Please enter your first name",
+                    })}
+                />
+              )}
+              {!isLogin && (
+                <InputField
+                  id="lastName"
+                  label="Last Name"
+                  type="text"
+                  placeholder="Enter Your last name"
+                  required
+                  {...registerForm("lastName", {
+                    required: "Please enter your last name",
+                    })}
+                />
+              )}
               <InputField
                 id="password"
                 label="Password"

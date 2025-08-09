@@ -17,12 +17,17 @@ export const authApi = createApi({
     }),
     register: builder.mutation<
       { message: string },
-      { email: string; password: string }
+      { firstName:string, lastName: string,  email: string; password: string }
     >({
-      query: (userInfo) => ({
+       query: ({ firstName, lastName, email, password }) => ({
         url: "/auth/email/register",
         method: "POST",
-        body: userInfo,
+        body: {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+        },
       }),
     }),
     getUser: builder.query<any, void>({

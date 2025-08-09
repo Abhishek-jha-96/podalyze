@@ -4,6 +4,8 @@ export interface LoginDataProps {
 }
 
 export interface RegisterDataProps extends LoginDataProps {
+  firstName: string;
+  lastName: string;
   confirmPassword: string;
 }
 
