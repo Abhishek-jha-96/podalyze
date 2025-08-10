@@ -31,7 +31,15 @@ export const authApi = createApi({
       }),
     }),
     getUser: builder.query<any, void>({
-      query: () => "/me",
+      query: () => {
+        const token = localStorage.getItem('access');
+        return {
+          url: '/users/me',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
     }),
   }),
 });
