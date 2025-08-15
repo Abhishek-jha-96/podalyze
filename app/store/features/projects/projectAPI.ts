@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import type { Project } from "~/constants/interfaces";
 import { baseQueryWithAuth } from "~/store/baseQuery";
 
 interface CreateProjectInput {
@@ -15,6 +16,7 @@ interface CreateProjectResponse {
 export const projectAPI = createApi({
   reducerPath: "projectAPI",
   baseQuery: baseQueryWithAuth,
+  tagTypes: ["Project"],
   endpoints: (builder) => ({
     createProject: builder.mutation<CreateProjectResponse, CreateProjectInput>({
       query: (data) => ({
@@ -22,6 +24,15 @@ export const projectAPI = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Project"],
+    }),
+
+    fetchProjects: builder.query<Project[], void>({
+      query: () => ({
+        url: "/project",
+        method: "GET",
+      }),
+      providesTags: ["Project"],
     }),
   }),
 });

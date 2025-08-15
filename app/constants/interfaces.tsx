@@ -24,3 +24,12 @@ export interface IProjectFormProps {
   title: string;
   url: string;
 }
+
+export interface Project {
+  id: string;
+  title: string;
+  url: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}

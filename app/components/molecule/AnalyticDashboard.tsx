@@ -23,9 +23,9 @@ export default function AnalyticDashboard() {
               <AnalyticCard
                 key={index}
                 title={proj.title}
-                genre={proj.genre ?? "Unknown"}
-                sentiment={proj.sentiment ?? "Unknown"}
-                avg_time={proj.avg_time ?? 0}
+                genre={"Unknown"}
+                sentiment={"Unknown"}
+                avg_time={0}
               />
             ))}
           </div>

@@ -1,12 +1,13 @@
 import type { IAnalyticProps } from "~/constants/interfaces";
 import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
+import { getSplicedTitle } from "~/lib/utils";
 
 
 export default function AnalyticCard({title, genre, sentiment, avg_time}: IAnalyticProps) {
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <Card className="border-2 border-black rounded-2xl bg-white">
+    <div className="md:max-w-2xl mx-auto p-4">
+      <Card className="rounded-2xl bg-white">
         <CardContent className="space-y-4">
           <div className="flex flex-row md:col gap-6">
             {/* Left side - Image */}
@@ -22,7 +23,7 @@ export default function AnalyticCard({title, genre, sentiment, avg_time}: IAnaly
 
             {/* Right side - Title */}
             <div className="flex-1 w-fit">  {/* this w-fit not working?? */}
-              <h2 className="text-2xl font-bold text-red-500 mb-2">{title}</h2>
+              <h2 className="text-2xl font-bold text-red-500 mb-2">{getSplicedTitle(title)}</h2>
               <div className="p-2 pt-4 border-t-2 ">
                     {/* Genre and Sentiment */}
                     <div className="flex flex-wrap gap-4 items-center">
