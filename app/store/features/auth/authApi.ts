@@ -6,7 +6,7 @@ export const authApi = createApi({
   baseQuery: baseQuery,
   endpoints: (builder) => ({
     login: builder.mutation<
-      { token: string; user: any },
+      { token: string; refreshToken	: string; user: any },
       { email: string; password: string }
     >({
       query: (credentials) => ({

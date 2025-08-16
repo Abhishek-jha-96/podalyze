@@ -9,15 +9,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const token = localStorage.getItem("access");
+    const refresh = localStorage.getItem("refresh");
 
-    if (token) {
-      dispatch(setCredentials({ token, user: null }));
+    if (token && refresh) {
+      dispatch(setCredentials({user: null, token: token, refresh: refresh }));
 
       // Fetch /me and update user
       dispatch(authApi.endpoints.getUser.initiate())
         .unwrap()
         .then((user) => {
-          dispatch(setCredentials({ token, user }));
+          dispatch(setCredentials({ user, token, refresh }));
         })
         .catch(() => {
           localStorage.removeItem("access");

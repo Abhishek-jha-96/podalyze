@@ -46,7 +46,8 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         const { email, password } = data as LoginDataProps;
         let res = await login({ email, password }).unwrap();
         localStorage.setItem("access", res.token);
-        dispatch(setCredentials({user: res.user, token: res.token}));
+        localStorage.setItem("refresh", res.refreshToken);
+        dispatch(setCredentials({user: res.user, token: res.token, refresh: res.refreshToken}));
         navigate('/');
 
       } else {
