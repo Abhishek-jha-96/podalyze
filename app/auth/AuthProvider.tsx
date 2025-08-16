@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "~/store/hooks";
-import { logout, setCredentials } from "~/store/features/auth/authSlice";
 import { authApi } from "~/store/features/auth/authApi";
+import { logout, setCredentials } from "~/store/features/auth/authSlice";
+import { useAppDispatch } from "~/store/hooks";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
@@ -12,17 +12,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const refresh = localStorage.getItem("refresh");
 
     if (token && refresh) {
-      dispatch(setCredentials({user: null, token: token, refresh: refresh }));
+      // Set temporary credentials
+      dispatch(setCredentials({ user: null, token, refresh }));
 
-      // Fetch /me and update user
+      // Try fetching user
       dispatch(authApi.endpoints.getUser.initiate())
         .unwrap()
         .then((user) => {
           dispatch(setCredentials({ user, token, refresh }));
         })
-        .catch(() => {
-          localStorage.removeItem("access");
-          dispatch(logout());
+        .catch(async () => {
+          // Try refreshing token
+          try {
+            const refreshResult = await dispatch(
+              authApi.endpoints.refresh.initiate({ refreshToken: refresh })
+            ).unwrap();
+
+            if (refreshResult?.token) {
+              localStorage.setItem("access", refreshResult.token);
+              // If refresh API also returns a new refresh token, save it
+              if (refreshResult.refreshToken) {
+                localStorage.setItem("refresh", refreshResult.refreshToken);
+              }
+
+              // Retry fetching user with new token
+              const user = await dispatch(
+                authApi.endpoints.getUser.initiate()
+              ).unwrap();
+
+              dispatch(
+                setCredentials({
+                  user,
+                  token: refreshResult.token,
+                  refresh: refreshResult.refreshToken || refresh,
+                })
+              );
+            } else {
+              throw new Error("Invalid refresh response");
+            }
+          } catch (err) {
+            // Refresh failed -> logout
+            localStorage.removeItem("access");
+            localStorage.removeItem("refresh");
+            dispatch(logout());
+          }
         })
         .finally(() => setLoading(false));
     } else {
@@ -30,13 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [dispatch]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <span>Loading...</span>
-      </div>
-    );
-  }
+  if (loading) return <div>Loading...</div>;
 
   return <>{children}</>;
 }

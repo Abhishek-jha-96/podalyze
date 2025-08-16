@@ -15,6 +15,16 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    refresh: builder.mutation< 
+    { token: string, refreshToken: string },
+    { refreshToken: string }
+    >({
+      query: (credential) => ({
+        url: "/auth/email/refresh_token",
+        method: "POST",
+        body: credential,
+      })
+    }),
     register: builder.mutation<
       { message: string },
       { firstName:string, lastName: string,  email: string; password: string }
