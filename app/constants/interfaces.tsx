@@ -22,13 +22,19 @@ export interface IAnalyticProps {
 
 export interface IProjectFormProps {
   title: string;
-  url: string;
+  youtubeUrl: string;
+  hostPopul: number;
+  guestPopul: number;
+  numberOfAds: number;
 }
 
 export interface Project {
   id: string;
   title: string;
   url: string;
+  hostPopul: number;
+  guestPopul: number;
+  numberOfAds: number;
   createdBy: string;
   createdAt: string;
   updatedAt: string;

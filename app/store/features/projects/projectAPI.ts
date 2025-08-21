@@ -5,6 +5,9 @@ import { baseQueryWithAuth } from "~/store/baseQuery";
 interface CreateProjectInput {
   title: string;
   url: string;
+  hostPopul: number;
+  guestPopul: number;
+  numberOfAds: number;
 }
 
 interface CreateProjectResponse {

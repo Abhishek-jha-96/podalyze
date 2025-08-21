@@ -28,7 +28,10 @@ export function AddModal() {
     try {
       await createProject({
         title: data.title,
-        url: data.url,
+        url: data.youtubeUrl,
+        hostPopul: data.hostPopul,
+        guestPopul: data.guestPopul,
+        numberOfAds: data.numberOfAds
       }).unwrap();
 
       reset();
@@ -55,22 +58,46 @@ export function AddModal() {
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="title">Podcast Name</Label>
               <InputField
               id="title"
-              label="title"
+              label="Podcast Name"
               {...register("title", { required: true})}
               placeholder="podcast title"
                />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="youtubeurl-1">Youtube URL</Label>
               <InputField
-                label="URL"
-                id="url"
-                {...register("url", { required: true})}
+                label="Youtube URL"
+                id="youtubeUrl"
+                {...register("youtubeUrl", { required: true})}
                 placeholder="https://youtu.be/9oL3o6pme7w?si=Yj7qpUX7-cGik7Ti"
               />
+            </div>
+            <div className="flex gap-5 justify-between">
+              <div className="w-1/2">
+                <InputField
+                  label="Host Popularity"
+                  id="hostPopul"
+                  {...register("hostPopul", { required: true})}
+                  placeholder="90"
+                />%
+              </div>
+              <div className="w-1/2">
+                <InputField
+                  label="Guest Popularity"
+                  id="guestPopul"
+                  {...register("guestPopul", { required: true})}
+                  placeholder="90"
+                />%
+              </div>
+            </div>
+            <div className="w-1/2">
+              <InputField
+                  label="Number of Ads"
+                  id="numberOfAds"
+                  {...register("numberOfAds", { required: true})}
+                  placeholder="90"
+                />
             </div>
           </div>
           <DialogFooter>
