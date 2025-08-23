@@ -41,15 +41,15 @@ export default function Hero() {
         <div className="w-2xs">
           {/* Twinkel One */}
           <motion.div
-            animate={{ 
-              y: [30, -20, 20], 
+            animate={{
+              y: [30, -20, 20],
               opacity: [0.8, 1, 0.85] // twinkle
             }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity, 
-              repeatType: "reverse", 
-              ease: "easeInOut" 
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut"
             }}
           >
             <TwinkelOne />
@@ -58,9 +58,9 @@ export default function Hero() {
           <div className="flex">
             {/* Twinkel Three */}
             <motion.div
-              animate={{ 
-                y: [0, -12, 0], 
-                x: [0, 8, 0], 
+              animate={{
+                y: [0, -12, 0],
+                x: [0, 8, 0],
                 opacity: [0.7, 1, 0.75] // twinkle
               }}
               transition={{
@@ -75,8 +75,8 @@ export default function Hero() {
 
             {/* Twinkel Two */}
             <motion.div
-              animate={{ 
-                y: [10, -10, 0], 
+              animate={{
+                y: [10, -10, 0],
                 opacity: [0.85, 1, 0.8] // twinkle
               }}
               transition={{

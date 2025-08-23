@@ -1,0 +1,35 @@
+services:
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: podalyze_frontend_dev
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=development
+    volumes:
+      - .:/home/appuser/app:Z
+      - /home/appuser/app/node_modules
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    # 🚀 no profile → runs by default
+
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+      args:
+        VITE_BASE_API_URL: ${VITE_BASE_API_URL}
+    container_name: podalyze_frontend_prod
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=production
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    profiles: ["prod"] # ✅ only runs with --profile prod

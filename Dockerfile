@@ -1,36 +1,77 @@
-# Stage 1: Builder for production builds
-FROM node:20-alpine AS builder
+# =========================
+# Stage 1: Base
+# =========================
+FROM node:20-alpine AS base
 
+# Install pnpm globally
 RUN npm install -g pnpm
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+
+# Create non-root user & group
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Set User
+USER appuser
+
+WORKDIR /home/appuser/app
+
+# Setup pnpm cache inside user home
+ENV PNPM_HOME=/home/appuser/.pnpm
+ENV PATH=$PNPM_HOME:$PATH
+
+
+# =========================
+# Stage 2: Builder (production only)
+# =========================
+FROM base AS builder
+
+# Copy manifests and install deps
+COPY --chown=appuser:appgroup package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
+# Build-time env
 ARG VITE_BASE_API_URL
 RUN echo "VITE_BASE_API_URL=${VITE_BASE_API_URL}" > .env.production
-COPY . .
+
+# Copy full source and build
+COPY --chown=appuser:appgroup . .
 RUN pnpm run build
 
 
-# Stage 2: Runtime container for both dev and prod
-FROM node:20-alpine
+# =========================
+# Stage 3: Runtime
+# =========================
+FROM base AS runtime
 
-RUN npm install -g pnpm
-WORKDIR /app
-
-COPY package.json pnpm-lock.yaml ./
+# Copy manifests & install deps (runtime only, no devDeps if you like)
+COPY --chown=appuser:appgroup package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# Always copy everything to support both modes
-COPY . .
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/public ./public
-
+# Default ENV
 ENV PORT=5173
 
-# Entrypoint determines mode
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# -----------------
+# Production mode
+# -----------------
+FROM runtime AS prod
+
+# Copy built outputs from builder
+COPY --chown=appuser:appgroup --from=builder /home/appuser/app/build ./build
+COPY --chown=appuser:appgroup --from=builder /home/appuser/app/public ./public
 
 EXPOSE 5173
-CMD ["sh", "/usr/local/bin/entrypoint.sh"]
+CMD ["pnpm", "start"]
+
+
+# -----------------
+# Development mode (hot reload)
+# -----------------
+FROM runtime AS dev
+
+# Copy source for hot-reload
+COPY --chown=appuser:appgroup . .
+
+# Expose dev server port
+EXPOSE 5173
+
+# Run vite dev server
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]
