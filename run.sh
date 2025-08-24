@@ -11,7 +11,7 @@ if [ "$MODE" = "prod" ]; then
   PROFILE="--profile prod"
 else
   SERVICE_NAME="frontend-dev"
-  PROFILE=""
+  PROFILE="--profile dev"
 fi
 
 CONTAINER_NAME="podalyze_${SERVICE_NAME}"
@@ -21,11 +21,11 @@ APP_PATH="/home/appuser/app"
 case "$1" in
   build)
     echo "▶️ Building and starting ($MODE)..."
-    podman compose --env-file .env $PROFILE up -d --build
-
+    podman compose -f "$COMPOSE_FILE" --env-file .env $PROFILE up -d --build
+    ;;
   up)
     echo "▶️ Starting containers ($MODE)..."
-    podman compose -f "$COMPOSE_FILE" $PROFILE up -d
+    podman compose -f "$COMPOSE_FILE" --env-file .env $PROFILE up -d
     ;;
 
   down)
