@@ -69,26 +69,26 @@ export function AddModal() {
               <InputField
                 label="Youtube URL"
                 id="youtubeUrl"
-                {...register("youtubeUrl", { required: true})}
+                {...register("youtubeUrl", { required: true, min: 0, max: 100})}
                 placeholder="https://youtu.be/9oL3o6pme7w?si=Yj7qpUX7-cGik7Ti"
               />
             </div>
             <div className="flex gap-5 justify-between">
               <div className="w-1/2">
                 <InputField
-                  label="Host Popularity"
+                  label="Host Popularity (%)"
                   id="hostPopul"
-                  {...register("hostPopul", { required: true})}
-                  placeholder="90"
-                />%
+                  {...register("hostPopul", { required: true, min: 0, max: 100})}
+                  placeholder="70"
+                />
               </div>
               <div className="w-1/2">
                 <InputField
-                  label="Guest Popularity"
+                  label="Guest Popularity (%)"
                   id="guestPopul"
-                  {...register("guestPopul", { required: true})}
+                  {...register("guestPopul", { required: true, min: 0})}
                   placeholder="90"
-                />%
+                />
               </div>
             </div>
             <div className="w-1/2">
@@ -96,7 +96,7 @@ export function AddModal() {
                   label="Number of Ads"
                   id="numberOfAds"
                   {...register("numberOfAds", { required: true})}
-                  placeholder="90"
+                  placeholder="5"
                 />
             </div>
           </div>
