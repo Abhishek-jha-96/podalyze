@@ -1,4 +1,3 @@
-import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -29,9 +28,10 @@ export function AddModal() {
       await createProject({
         title: data.title,
         url: data.youtubeUrl,
-        hostPopul: data.hostPopul,
-        guestPopul: data.guestPopul,
-        numberOfAds: data.numberOfAds
+        // TODO: If possible eliminate type conversion.
+        hostPopularity: Number(data.hostPopul),
+        guestPopularity: Number(data.guestPopul),
+        numberOfAds: Number(data.numberOfAds)
       }).unwrap();
 
       reset();
@@ -42,74 +42,74 @@ export function AddModal() {
 
   return (
     <Dialog>
-      <form onSubmit={handleSubmit(handleProjectCreate)}>
         <DialogTrigger asChild>
           <Button className="bg-primary-text text-lg py-7">
             <span>Add Podcast</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add Podcast Details</DialogTitle>
-            <DialogDescription>
-              Enter the podcast details and link of the podcast. "Supported
-              Platforms: YouTube."
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <InputField
-              id="title"
-              label="Podcast Name"
-              {...register("title", { required: true})}
-              placeholder="podcast title"
-               />
-            </div>
-            <div className="grid gap-3">
-              <InputField
-                label="Youtube URL"
-                id="youtubeUrl"
-                {...register("youtubeUrl", { required: true, min: 0, max: 100})}
-                placeholder="https://youtu.be/9oL3o6pme7w?si=Yj7qpUX7-cGik7Ti"
-              />
-            </div>
-            <div className="flex gap-5 justify-between">
-              <div className="w-1/2">
+          <form onSubmit={handleSubmit(handleProjectCreate)}>
+            <DialogHeader>
+              <DialogTitle>Add Podcast Details</DialogTitle>
+              <DialogDescription>
+                Enter the podcast details and link of the podcast. "Supported
+                Platforms: YouTube."
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4">
+              <div className="grid gap-3">
                 <InputField
-                  label="Host Popularity (%)"
-                  id="hostPopul"
-                  {...register("hostPopul", { required: true, min: 0, max: 100})}
-                  placeholder="70"
+                id="title"
+                label="Podcast Name"
+                {...register("title", { required: true})}
+                placeholder="podcast title"
                 />
+              </div>
+              <div className="grid gap-3">
+                <InputField
+                  label="Youtube URL"
+                  id="youtubeUrl"
+                  {...register("youtubeUrl", { required: true, min: 0, max: 100})}
+                  placeholder="https://youtu.be/9oL3o6pme7w?si=Yj7qpUX7-cGik7Ti"
+                />
+              </div>
+              <div className="flex gap-5 justify-between">
+                <div className="w-1/2">
+                  <InputField
+                    label="Host Popularity (%)"
+                    id="hostPopul"
+                    {...register("hostPopul", { required: true, min: 0, max: 100})}
+                    placeholder="70"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <InputField
+                    label="Guest Popularity (%)"
+                    id="guestPopul"
+                    {...register("guestPopul", { required: true, min: 0})}
+                    placeholder="90"
+                  />
+                </div>
               </div>
               <div className="w-1/2">
                 <InputField
-                  label="Guest Popularity (%)"
-                  id="guestPopul"
-                  {...register("guestPopul", { required: true, min: 0})}
-                  placeholder="90"
-                />
+                    label="Number of Ads"
+                    id="numberOfAds"
+                    {...register("numberOfAds", { required: true})}
+                    placeholder="5"
+                  />
               </div>
             </div>
-            <div className="w-1/2">
-              <InputField
-                  label="Number of Ads"
-                  id="numberOfAds"
-                  {...register("numberOfAds", { required: true})}
-                  placeholder="5"
-                />
-            </div>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit" disabled={isProjectCreating || isSubmitting}>
-              {isProjectCreating || isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit" disabled={isProjectCreating || isSubmitting}>
+                {isProjectCreating || isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
-      </form>
     </Dialog>
   );
 }
