@@ -14,7 +14,7 @@ export default function Hero() {
       <div>
         <Navbar />
       </div>
-      <div className="flex w-full justify-between items-center">
+      <div className="flex w-full justify-between items-center py-30">
         {/* Floating Swirl */}
         <motion.div
           animate={{ y: [20, -20, 20], x: [0, -5, 0] }}
@@ -27,7 +27,7 @@ export default function Hero() {
         >
           <HeroSwirl />
         </motion.div>
-        <div className="flex flex-col gap-16 items-center">
+        <div className="flex flex-col gap-12 items-center">
           <HeroText />
           <p>We cover all kinds of categories and a weekly special guest.</p>
           <NavLink to="/analytics">
@@ -43,6 +43,7 @@ export default function Hero() {
           <motion.div
             animate={{
               y: [30, -20, 20],
+              x: [-4, 20, 0],
               opacity: [0.8, 1, 0.85] // twinkle
             }}
             transition={{
@@ -76,7 +77,8 @@ export default function Hero() {
             {/* Twinkel Two */}
             <motion.div
               animate={{
-                y: [10, -10, 0],
+                y: [20, -10, 0],
+                x: [0, -8, 0],
                 opacity: [0.85, 1, 0.8] // twinkle
               }}
               transition={{

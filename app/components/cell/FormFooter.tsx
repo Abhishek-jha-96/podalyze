@@ -7,7 +7,7 @@ export function FormFooter({setIsLogin, isLogin}: FormFooterProps) {
   return (
     <div className="mt-4 text-center text-sm">
       {isLogin ? `Don't have an account?` : `Already have an account?`}{" "}
-      <a onClick={() => setIsLogin(!isLogin)} className="underline underline-offset-4">
+      <a onClick={() => setIsLogin(!isLogin)} className="hover:cursor-pointer hover:text-blue-700">
         {isLogin ? `Sign up` : `Login`}
       </a>
     </div>
