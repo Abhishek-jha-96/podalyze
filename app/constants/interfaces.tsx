@@ -13,11 +13,28 @@ export interface LoginFormProps extends React.ComponentProps<"div"> {
   className?: string;
 }
 
+export type SentimentTone =
+  | "highly-positive"
+  | "positive"
+  | "neutral"
+  | "negative"
+  | "pending";
+
+export type AnalyticViewMode = "list" | "grid";
+
+export type AnalyticNavItem = "dashboard" | "insights" | "settings";
+
 export interface IAnalyticProps {
+  id: string;
   title: string;
-  genre: string;
+  url: string;
+  updatedAt: string;
   sentiment: string;
-  avg_time: number
+  sentimentTone: SentimentTone;
+  avgTime: string;
+  status: "active" | "inactive" | "pending";
+  thumbnail?: string;
+  onFullReport?: () => void;
 }
 
 export interface IProjectFormProps {
@@ -26,6 +43,15 @@ export interface IProjectFormProps {
   hostPopul: number;
   guestPopul: number;
   numberOfAds: number;
+}
+
+export interface Task {
+  id: string;
+  project: string;
+  status: "active" | "inactive" | "pending";
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Project {
@@ -38,4 +64,5 @@ export interface Project {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  tasks?: Task[];
 }

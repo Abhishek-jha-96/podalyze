@@ -31,5 +31,5 @@ export default function Analytics() {
     );
   }
 
-  return <div><AnalyticsPage /></div>;
+  return <AnalyticsPage />;
 }

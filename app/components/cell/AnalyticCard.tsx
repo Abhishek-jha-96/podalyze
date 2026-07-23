@@ -1,57 +1,136 @@
+import { ArrowRight, Youtube } from "lucide-react";
 import type { IAnalyticProps } from "~/constants/interfaces";
-import { Badge } from "../ui/badge";
-import { Card, CardContent } from "../ui/card";
-import { getSplicedTitle } from "~/lib/utils";
+import {
+  cn,
+  formatDisplayUrl,
+  formatUpdatedAt,
+  getSentimentMeta,
+} from "~/lib/utils";
 
+interface AnalyticCardProps extends IAnalyticProps {
+  compact?: boolean;
+}
 
-export default function AnalyticCard({title, genre, sentiment, avg_time}: IAnalyticProps) {
+export default function AnalyticCard({
+  title,
+  url,
+  updatedAt,
+  sentiment,
+  sentimentTone,
+  avgTime,
+  status,
+  thumbnail,
+  onFullReport,
+  compact = false,
+}: AnalyticCardProps) {
+  const sentimentMeta = getSentimentMeta(sentimentTone);
+  const showActiveBadge = status === "active";
+
   return (
-    <div className="md:max-w-2xl mx-auto p-4">
-      <Card className="rounded-2xl bg-white">
-        <CardContent className="space-y-4">
-          <div className="flex flex-row md:col gap-6">
-            {/* Left side - Image */}
-            <div className="flex-shrink-0">
-              <div className="relative w-52 h-32 rounded-lg overflow-hidden">
-                <img
-                  src="/bg-1.png"
-                  alt="Empty chairs representing pandemic social distancing"
-                  className="object-cover"
+    <article
+      className={cn(
+        "w-full rounded-xl border border-[#EEEDf7] bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.08)]",
+        compact && "h-full"
+      )}
+    >
+      <div
+        className={cn(
+          "flex w-full gap-6",
+          compact ? "flex-col" : "flex-col sm:flex-row sm:items-start"
+        )}
+      >
+        <div
+          className={cn(
+            "relative shrink-0 overflow-hidden rounded-lg bg-[#E3E1EC]",
+            compact
+              ? "aspect-video w-full"
+              : "aspect-video w-full sm:aspect-auto sm:min-h-[120px] sm:w-[21%] sm:min-w-[140px]"
+          )}
+        >
+          <img
+            src={thumbnail}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          {showActiveBadge && (
+            <span className="absolute top-2 left-2 rounded bg-[#B02713] px-2 py-1 text-[10px] font-bold leading-[15px] tracking-wide text-white uppercase">
+              Active
+            </span>
+          )}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex min-w-0 items-center gap-2">
+                <Youtube className="size-3.5 shrink-0 text-red-600" />
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="truncate text-xs text-[#5F5E5E] hover:text-[#B02713]"
+                >
+                  {formatDisplayUrl(url)}
+                </a>
+              </div>
+              <p className="text-[11px] leading-[16.5px] text-[#5F5E5E]">
+                {formatUpdatedAt(updatedAt)}
+              </p>
+            </div>
+
+            <h3 className="text-lg leading-7 text-[#1A1B22]">{title}</h3>
+          </div>
+
+          <div className="flex flex-col gap-4 border-t border-[#EEEDf7] pt-4 sm:flex-row sm:items-start sm:gap-8">
+            <div className="flex flex-col">
+              <p className="mb-1 text-[10px] tracking-[0.5px] text-[#5F5E5E] uppercase">
+                Predicted Avg. Watch Time
+              </p>
+              <p className="flex items-baseline gap-1">
+                <span className="text-xl font-bold leading-7 text-[#1A1B22]">
+                  {avgTime}
+                </span>
+                {avgTime !== "—" && (
+                  <span className="text-xs text-[#5F5E5E]">mins</span>
+                )}
+              </p>
+            </div>
+
+            <div className="flex flex-col pb-2">
+              <p className="mb-1 text-[10px] tracking-[0.5px] text-[#5F5E5E] uppercase">
+                Sentiment Analysis
+              </p>
+              <div className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    "size-2.5 rounded-full",
+                    sentimentMeta.dotClass
+                  )}
                 />
+                <span
+                  className={cn(
+                    "text-sm font-bold leading-5",
+                    sentimentMeta.textClass
+                  )}
+                >
+                  {sentiment || sentimentMeta.label}
+                </span>
               </div>
             </div>
 
-            {/* Right side - Title */}
-            <div className="flex-1 w-fit">  {/* this w-fit not working?? */}
-              <h2 className="text-2xl font-bold text-red-500 mb-2">{getSplicedTitle(title)}</h2>
-              <div className="p-2 pt-4 border-t-2 ">
-                    {/* Genre and Sentiment */}
-                    <div className="flex flex-wrap gap-4 items-center">
-                        <div className="flex items-center gap-2">
-                        <span className="text-gray-500 font-medium">Genre :</span>
-                        <Badge variant="outline" className="bg-white border-gray-400 rounded-lg px-3 py-1">
-                            {genre}
-                        </Badge>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                        <span className="text-gray-500 font-medium">Sentiment :</span>
-                        <Badge variant="outline" className="bg-white border-gray-400 rounded-lg px-3 py-1">
-                            {sentiment}
-                        </Badge>
-                        </div>
-                    </div>
-
-                    {/* Expected Watch Time */}
-                    <div className="flex items-center gap-2 pt-4">
-                        <span className="text-gray-600 font-medium text-lg">Expected Watch Time:</span>
-                        <span className="text-red-500 font-bold text-xl">{avg_time}min</span>
-                    </div>
-              </div>
+            <div className="flex flex-1 items-center justify-end sm:pt-1">
+              <button
+                type="button"
+                onClick={onFullReport}
+                className="flex items-center gap-2 rounded-lg border border-[#B02713]/20 bg-[#F4F2FD] px-4 py-2 text-sm font-bold text-[#B02713] transition-colors hover:bg-[#EDE9FE]"
+              >
+                Full Report
+                <ArrowRight className="size-3" />
+              </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
+        </div>
+      </div>
+    </article>
+  );
 }
