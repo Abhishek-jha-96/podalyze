@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
             <Spinner />
           </div>
         ) : activeNav === "dashboard" ? (
-          <AnalyticDashboard searchQuery={searchQuery} />
+          <AnalyticDashboard />
         ) : (
           <div className="flex flex-1 flex-col items-center justify-center gap-2 p-8 text-center">
             <h2 className="text-2xl text-[#1A1B22] capitalize">{activeNav}</h2>

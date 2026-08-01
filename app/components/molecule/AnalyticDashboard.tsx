@@ -15,7 +15,6 @@ import { useAppSelector } from "~/store/hooks";
 import AnalyticCard from "../cell/AnalyticCard";
 import NoContent from "../cell/NoContent";
 
-const PAGE_SIZE = 12;
 
 function deriveProjectStatus(
   project: Project
@@ -35,33 +34,10 @@ function deriveSentimentTone(status: Project["tasks"]): SentimentTone {
   return "pending";
 }
 
-interface AnalyticDashboardProps {
-  searchQuery: string;
-}
-
-export default function AnalyticDashboard({
-  searchQuery,
-}: AnalyticDashboardProps) {
+export default function AnalyticDashboard() {
   const projects = useAppSelector((state) => state.project.projects);
   const [viewMode, setViewMode] = useState<AnalyticViewMode>("list");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [searchQuery]);
-
-  const filteredProjects = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return projects;
-    return projects.filter(
-      (project) =>
-        project.title.toLowerCase().includes(query) ||
-        project.url.toLowerCase().includes(query)
-    );
-  }, [projects, searchQuery]);
-
-  const visibleProjects = filteredProjects.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredProjects.length;
 
   return (
     <section className="flex w-full flex-1 flex-col p-8">
@@ -107,7 +83,7 @@ export default function AnalyticDashboard({
           </div>
         </div>
 
-        {filteredProjects.length === 0 ? (
+        {projects.length === 0 ? (
           <div className="flex justify-center py-10">
             <NoContent />
           </div>
@@ -120,7 +96,7 @@ export default function AnalyticDashboard({
                   : "grid grid-cols-1 gap-4 lg:grid-cols-2"
               )}
             >
-              {visibleProjects.map((project, index) => {
+              {projects.map((project, index) => {
                 const status = deriveProjectStatus(project);
                 const sentimentTone = deriveSentimentTone(project.tasks);
                 const sentimentMeta = getSentimentMeta(sentimentTone);
@@ -145,21 +121,9 @@ export default function AnalyticDashboard({
 
             <div className="flex flex-col items-center gap-4 border-t border-[#EEEDf7] pt-16 pb-12">
               <p className="text-center text-sm leading-5 text-[#5F5E5E]">
-                Viewing recent {visibleProjects.length} episode
-                {visibleProjects.length === 1 ? "" : "s"}
-                {hasMore ? ". More available in archives." : "."}
+                Viewing recent {projects.length} episode
+                {projects.length === 1 ? "" : "s"}
               </p>
-              {hasMore && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleCount((count) => count + PAGE_SIZE)
-                  }
-                  className="rounded-full border border-[#E2BEB8] px-8 py-2 text-base font-bold leading-6 text-[#B02713] transition-colors hover:bg-[#F4F2FD]"
-                >
-                  Load Data Archive
-                </button>
-              )}
             </div>
           </>
         )}

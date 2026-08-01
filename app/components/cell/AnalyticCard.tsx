@@ -52,7 +52,7 @@ export default function AnalyticCard({
             alt=""
             className="h-full w-full object-cover"
           />
-          {showActiveBadge && (
+          {status && (
             <span className="absolute top-2 left-2 rounded bg-[#B02713] px-2 py-1 text-[10px] font-bold leading-[15px] tracking-wide text-white uppercase">
               Active
             </span>
