@@ -24,7 +24,6 @@ export default function AnalyticCard({
   compact = false,
 }: AnalyticCardProps) {
   const sentimentMeta = getSentimentMeta(sentimentTone);
-  const showActiveBadge = status === "active";
 
   return (
     <article
@@ -54,7 +53,7 @@ export default function AnalyticCard({
           />
           {status && (
             <span className="absolute top-2 left-2 rounded bg-[#B02713] px-2 py-1 text-[10px] font-bold leading-[15px] tracking-wide text-white uppercase">
-              Active
+              {status}
             </span>
           )}
         </div>
@@ -80,7 +79,7 @@ export default function AnalyticCard({
 
             <h3 className="text-lg leading-7 text-[#1A1B22]">{title}</h3>
           </div>
-
+          
           <div className="flex flex-col gap-4 border-t border-[#EEEDf7] pt-4 sm:flex-row sm:items-start sm:gap-8">
             <div className="flex flex-col">
               <p className="mb-1 text-[10px] tracking-[0.5px] text-[#5F5E5E] uppercase">

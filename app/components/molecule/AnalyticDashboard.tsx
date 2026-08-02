@@ -1,5 +1,5 @@
 import { LayoutGrid, ListFilter } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import type {
   AnalyticViewMode,
   Project,
@@ -15,15 +15,14 @@ import { useAppSelector } from "~/store/hooks";
 import AnalyticCard from "../cell/AnalyticCard";
 import NoContent from "../cell/NoContent";
 
-
 function deriveProjectStatus(
-  project: Project
-): "active" | "inactive" | "pending" {
+  project: Project,
+): "In Progress" | "Pending" | "Completed" {
   const statuses = project.tasks?.map((task) => task.status) ?? [];
-  if (statuses.includes("active")) return "active";
-  if (statuses.includes("pending")) return "pending";
-  if (statuses.includes("inactive")) return "inactive";
-  return "pending";
+  if (statuses.includes("active")) return "In Progress";
+  if (statuses.includes("pending")) return "Pending";
+  if (statuses.includes("inactive")) return "Completed";
+  return "Pending";
 }
 
 function deriveSentimentTone(status: Project["tasks"]): SentimentTone {
@@ -38,17 +37,12 @@ export default function AnalyticDashboard() {
   const projects = useAppSelector((state) => state.project.projects);
   const [viewMode, setViewMode] = useState<AnalyticViewMode>("list");
 
-
   return (
     <section className="flex w-full flex-1 flex-col p-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <div className="flex w-full flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-2xl leading-8 text-[#1A1B22]">Your Podcasts</h2>
-            <p className="text-sm leading-5 text-[#5F5E5E]">
-              Managing {projects.length} active channel
-              {projects.length === 1 ? "" : "s"}
-            </p>
           </div>
 
           <div className="flex items-start gap-2">
@@ -61,7 +55,7 @@ export default function AnalyticDashboard() {
                 "rounded-lg p-2 transition-colors",
                 viewMode === "list"
                   ? "bg-[#F4F2FD] text-[#B02713]"
-                  : "text-[#5F5E5E] hover:bg-[#F4F2FD]"
+                  : "text-[#5F5E5E] hover:bg-[#F4F2FD]",
               )}
             >
               <ListFilter className="size-[18px]" />
@@ -75,7 +69,7 @@ export default function AnalyticDashboard() {
                 "rounded-lg p-2 transition-colors",
                 viewMode === "grid"
                   ? "bg-[#F4F2FD] text-[#B02713]"
-                  : "text-[#5F5E5E] hover:bg-[#F4F2FD]"
+                  : "text-[#5F5E5E] hover:bg-[#F4F2FD]",
               )}
             >
               <LayoutGrid className="size-[18px]" />
@@ -93,7 +87,7 @@ export default function AnalyticDashboard() {
               className={cn(
                 viewMode === "list"
                   ? "flex flex-col gap-4"
-                  : "grid grid-cols-1 gap-4 lg:grid-cols-2"
+                  : "grid grid-cols-1 gap-4 lg:grid-cols-2",
               )}
             >
               {projects.map((project, index) => {
@@ -118,13 +112,7 @@ export default function AnalyticDashboard() {
                 );
               })}
             </div>
-
-            <div className="flex flex-col items-center gap-4 border-t border-[#EEEDf7] pt-16 pb-12">
-              <p className="text-center text-sm leading-5 text-[#5F5E5E]">
-                Viewing recent {projects.length} episode
-                {projects.length === 1 ? "" : "s"}
-              </p>
-            </div>
+            <div className="flex flex-col items-center gap-4 border-t border-[#EEEDf7] pt-16 pb-12"></div>
           </>
         )}
       </div>

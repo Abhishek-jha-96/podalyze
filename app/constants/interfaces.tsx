@@ -32,7 +32,7 @@ export interface IAnalyticProps {
   sentiment: string;
   sentimentTone: SentimentTone;
   avgTime: string;
-  status: "active" | "inactive" | "pending";
+  status: "In Progress" | "Pending" | "Completed";
   thumbnail?: string;
   onFullReport?: () => void;
 }
