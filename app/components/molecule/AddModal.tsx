@@ -56,12 +56,11 @@ export function AddModal({ trigger }: AddModalProps) {
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit(handleProjectCreate)}>
+        <form onSubmit={handleSubmit(handleProjectCreate)} className="space-y-2">
           <DialogHeader>
             <DialogTitle>Add Podcast Details</DialogTitle>
             <DialogDescription>
-              Enter the podcast details and link of the podcast. "Supported
-              Platforms: YouTube."
+              Enter the podcast details and link of the podcast.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
@@ -119,6 +118,7 @@ export function AddModal({ trigger }: AddModalProps) {
             <Button
               type="submit"
               disabled={isProjectCreating || isSubmitting}
+              className="bg-primary-text hover:bg-[#9a2210]"
             >
               {isProjectCreating || isSubmitting ? "Submitting..." : "Submit"}
             </Button>
