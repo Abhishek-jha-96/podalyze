@@ -117,3 +117,25 @@ export function getSentimentMeta(tone: SentimentTone): {
       }
   }
 }
+
+export function sentimentToTone(
+  sentiment?: "Positive" | "Negative" | "Neutral",
+): SentimentTone {
+  switch (sentiment) {
+    case "Positive":
+      return "positive"
+    case "Negative":
+      return "negative"
+    case "Neutral":
+      return "neutral"
+    default:
+      return "pending"
+  }
+}
+
+export function formatMetaLabel(key: string): string {
+  return key
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ")
+}

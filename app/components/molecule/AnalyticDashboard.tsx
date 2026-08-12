@@ -1,36 +1,36 @@
 import { LayoutGrid, ListFilter } from "lucide-react";
 import { useState } from "react";
 import type {
+  AnalyticCardStatus,
   AnalyticViewMode,
   Project,
-  SentimentTone,
+  Task,
 } from "~/constants/interfaces";
 import {
   cn,
   formatWatchTime,
-  getSentimentMeta,
   getYoutubeThumbnail,
+  sentimentToTone,
 } from "~/lib/utils";
 import { useAppSelector } from "~/store/hooks";
 import AnalyticCard from "../cell/AnalyticCard";
 import NoContent from "../cell/NoContent";
 
-function deriveProjectStatus(
-  project: Project,
-): "In Progress" | "Pending" | "Completed" {
-  const statuses = project.tasks?.map((task) => task.status) ?? [];
-  if (statuses.includes("active")) return "In Progress";
-  if (statuses.includes("pending")) return "Pending";
-  if (statuses.includes("inactive")) return "Completed";
-  return "Pending";
+function getLatestTask(project: Project): Task | undefined {
+  if (!project.tasks?.length) return undefined;
+
+  return [...project.tasks].sort(
+    (a, b) =>
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  )[0];
 }
 
-function deriveSentimentTone(status: Project["tasks"]): SentimentTone {
-  const latest = status?.[0]?.status;
-  if (latest === "active") return "highly-positive";
-  if (latest === "inactive") return "positive";
-  if (latest === "pending") return "neutral";
-  return "pending";
+function mapTaskStatusToCardStatus(
+  taskStatus: Task["status"] | undefined,
+): AnalyticCardStatus {
+  if (taskStatus === "active") return "Completed";
+  if (taskStatus === "inactive") return "Failed";
+  return "Pending";
 }
 
 export default function AnalyticDashboard() {
@@ -91,9 +91,10 @@ export default function AnalyticDashboard() {
               )}
             >
               {projects.map((project, index) => {
-                const status = deriveProjectStatus(project);
-                const sentimentTone = deriveSentimentTone(project.tasks);
-                const sentimentMeta = getSentimentMeta(sentimentTone);
+                const task = getLatestTask(project);
+                const taskStatus = task?.status ?? "pending";
+                const cardStatus = mapTaskStatusToCardStatus(task?.status);
+                const sentimentTone = sentimentToTone(task?.sentiment);
 
                 return (
                   <AnalyticCard
@@ -101,11 +102,13 @@ export default function AnalyticDashboard() {
                     id={project.id}
                     title={project.title}
                     url={project.url}
-                    updatedAt={project.updatedAt}
-                    status={status}
-                    sentiment={sentimentMeta.label}
+                    updatedAt={task?.updatedAt ?? project.updatedAt}
+                    status={cardStatus}
+                    taskStatus={taskStatus}
+                    sentiment={task?.sentiment ?? "Pending"}
                     sentimentTone={sentimentTone}
-                    avgTime={formatWatchTime(0)}
+                    avgTime={formatWatchTime(task?.watchTime ?? 0)}
+                    metaData={task?.metaData}
                     thumbnail={getYoutubeThumbnail(project.url, index)}
                     compact={viewMode === "grid"}
                   />
