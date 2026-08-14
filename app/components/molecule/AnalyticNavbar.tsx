@@ -85,7 +85,6 @@ export default function AnalyticNavbar({
             <p className="truncate text-xs font-bold leading-4 text-[#1A1B22]">
               {displayName}
             </p>
-            <p className="text-[10px] leading-[15px] text-[#5F5E5E]">Pro Plan</p>
           </div>
         </div>
       </div>
