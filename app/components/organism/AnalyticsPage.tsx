@@ -10,6 +10,7 @@ import AnalyticDashboard from "../molecule/AnalyticDashboard";
 import AnalyticHeader from "../molecule/AnalyticHeader";
 import AnalyticNavbar from "../molecule/AnalyticNavbar";
 import { Spinner } from "../molecule/spinnerLoader";
+import InsightsDashboard from "../molecule/InsightsDashboard";
 
 export default function AnalyticsPage() {
   const dispatch = useAppDispatch();
@@ -40,7 +41,9 @@ export default function AnalyticsPage() {
           </div>
         ) : activeNav === "dashboard" ? (
           <AnalyticDashboard />
-        ) : (
+        ) : activeNav === "insights" ? (
+          <InsightsDashboard />
+        ): (
           <div className="flex flex-1 flex-col items-center justify-center gap-2 p-8 text-center">
             <h2 className="text-2xl text-[#1A1B22] capitalize">{activeNav}</h2>
             <p className="text-sm text-[#5F5E5E]">
