@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { Project } from "~/constants/interfaces";
+import type { DashboardMetrics, Project } from "~/constants/interfaces";
 import { baseQueryWithAuth } from "~/store/baseQuery";
 
 interface CreateProjectInput {
@@ -19,7 +19,7 @@ interface CreateProjectResponse {
 export const projectAPI = createApi({
   reducerPath: "projectAPI",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["Project"],
+  tagTypes: ["Project", "Dashboard"],
   endpoints: (builder) => ({
     createProject: builder.mutation<CreateProjectResponse, CreateProjectInput>({
       query: (data) => ({
@@ -27,7 +27,7 @@ export const projectAPI = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Project"],
+      invalidatesTags: ["Project", "Dashboard"],
     }),
 
     fetchProjects: builder.query<Project[], void>({
@@ -37,8 +37,16 @@ export const projectAPI = createApi({
       }),
       providesTags: ["Project"],
     }),
+
+    fetchDashboard: builder.query<DashboardMetrics, void>({
+      query: () => ({
+        url: "/dashboard",
+        method: "GET",
+      }),
+      providesTags: ["Dashboard"],
+    }),
   }),
 });
 
 
-export const { useCreateProjectMutation } = projectAPI;
+export const { useCreateProjectMutation, useFetchDashboardQuery } = projectAPI;

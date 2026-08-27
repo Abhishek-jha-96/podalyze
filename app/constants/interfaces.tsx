@@ -87,3 +87,33 @@ export interface Project {
   updatedAt: string;
   tasks?: Task[];
 }
+
+export type OverallSentiment = "Positive" | "Negative" | "Neutral";
+
+export interface LastWeekProjectDetails {
+  Monday: number;
+  Tuesday: number;
+  Wednesday: number;
+  Thursday: number;
+  Friday: number;
+  Saturday: number;
+  Sunday: number;
+}
+
+export interface TopProject {
+  id: string;
+  title: string | null;
+  url: string;
+  predictedWatchTime: number;
+}
+
+export interface DashboardMetrics {
+  totalProjects: number;
+  avgWatchTime: number;
+  adPlacements: number;
+  overallSentiment: OverallSentiment | null;
+  hostPopularity: number;
+  guestPopularity: number;
+  lastWeekProjectDetails: LastWeekProjectDetails;
+  top3Projects: TopProject[];
+}
