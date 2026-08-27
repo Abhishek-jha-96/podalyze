@@ -54,12 +54,21 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         const { firstName, lastName, email, password } = data as RegisterDataProps;
         await register({firstName, lastName, email, password }).unwrap();
         if (isSuccess){
+          setIsLogin(true);
           alert("Successfully registered. Now login to your account!")
         }
       }
-    } catch (err) {
-      console.error("Failed to authenticate:", err);
-      alert(`Failed Request due to: ${err}`)
+    } catch (err: any) {
+      console.error("Failed to authenticate.", err);
+
+      const errors = err?.data?.errors;
+
+      if (errors && typeof errors === "object") {
+        const [field, message] = Object.entries(errors)[0] as [string, string];
+        alert(`Failed Request due to: ${field}: ${message}`);
+      } else {
+        alert("Failed Request");
+      }
     }
   };
 

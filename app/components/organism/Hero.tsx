@@ -6,28 +6,39 @@ import TwinkelThree from "~/assets/twinkel3";
 import { Button } from "../ui/button";
 import { NavLink } from "react-router";
 import Navbar from "../molecule/Navbar";
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
 export default function Hero() {
   return (
-    <main className="flex flex-col justify-center">
-      <div>
+    <main className="flex h-dvh w-full flex-col overflow-hidden">
+      <div className="shrink-0 px-6 pt-4">
         <Navbar />
       </div>
-      <div className="flex w-full justify-between items-center py-30">
-        {/* Floating Swirl */}
+
+      <section className="flex min-h-0 flex-1 w-full items-center justify-between gap-6 pb-6 lg:gap-8 lg:pb-8">
         <motion.div
-          animate={{ y: [20, -20, 20], x: [0, -5, 0] }}
+          className="shrink-0"
+          animate={{ y: [-14, 14], rotate: [-2, 2] }}
           transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
+            y: {
+              duration: 7,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            },
+            rotate: {
+              duration: 10,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+              delay: 0.5,
+            },
           }}
         >
           <HeroSwirl />
         </motion.div>
-        <div className="flex flex-col gap-12 items-center">
+
+        <div className="flex flex-col items-center gap-8 text-center">
           <HeroText />
           <p>We cover all kinds of categories and a weekly special guest.</p>
           <NavLink to="/analytics">
@@ -37,63 +48,106 @@ export default function Hero() {
           </NavLink>
         </div>
 
-        {/* Twinkels Floating Group */}
-        <div className="w-2xs">
-          {/* Twinkel One */}
+        <div className="relative flex w-2xs shrink-0 flex-col items-end gap-4">
           <motion.div
             animate={{
-              y: [30, -20, 20],
-              x: [-4, 20, 0],
-              opacity: [0.8, 1, 0.85] // twinkle
+              y: [-10, 10],
+              opacity: [0.65, 1],
+              scale: [0.97, 1.03],
             }}
             transition={{
-              duration: 5,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut"
+              y: {
+                duration: 5.5,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              },
+              opacity: {
+                duration: 2.8,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              },
+              scale: {
+                duration: 3.2,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              },
             }}
           >
             <TwinkelOne />
           </motion.div>
 
           <div className="flex">
-            {/* Twinkel Three */}
             <motion.div
               animate={{
-                y: [0, -12, 0],
-                x: [0, 8, 0],
-                opacity: [0.7, 1, 0.75] // twinkle
+                y: [-8, 8],
+                opacity: [0.7, 1],
+                scale: [0.98, 1.02],
               }}
               transition={{
-                duration: 4,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
+                y: {
+                  duration: 4.2,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.3,
+                },
+                opacity: {
+                  duration: 2.2,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.4,
+                },
+                scale: {
+                  duration: 2.6,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.2,
+                },
               }}
             >
               <TwinkelThree />
             </motion.div>
 
-            {/* Twinkel Two */}
             <motion.div
               animate={{
-                y: [20, -10, 0],
-                x: [0, -8, 0],
-                opacity: [0.85, 1, 0.8] // twinkle
+                y: [-12, 12],
+                opacity: [0.75, 1],
+                scale: [0.96, 1.04],
               }}
               transition={{
-                duration: 6.5, // slightly different for desync
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
+                y: {
+                  duration: 6,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.8,
+                },
+                opacity: {
+                  duration: 3.1,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.6,
+                },
+                scale: {
+                  duration: 3.5,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: 0.9,
+                },
               }}
             >
               <TwinkelTwo />
             </motion.div>
           </div>
         </div>
-
-      </div>
+      </section>
     </main>
   );
 }

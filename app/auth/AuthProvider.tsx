@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Spinner } from "~/components/molecule/spinnerLoader";
 import { authApi } from "~/store/features/auth/authApi";
 import { logout, setCredentials } from "~/store/features/auth/authSlice";
 import { useAppDispatch } from "~/store/hooks";
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [dispatch]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="flex h-screen w-full items-center justify-center"><Spinner /></div>;
 
   return <>{children}</>;
 }
